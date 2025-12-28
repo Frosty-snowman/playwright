@@ -1,12 +1,27 @@
 import { test } from '@playwright/test';
-import { LoginPage } from '../page/login.page';
+import { LoginPage } from '../page/login-page';
+import { ProductPage } from '../page/product-page';
 
-test('can login true account', async ({ page }) => {
-  const loginPage = new LoginPage(page);
+test('user can login and add product to cart', async ({ page }) => {
+  const loginPage = new LoginPage(page)
+  const productPage = new ProductPage(page)
 
-  await loginPage.goto();
-  await loginPage.login('customer1', 'password');
-});
+  await page.goto('https://merchandise-dev.odds.team/')
+
+  await test.step('Login', async () => {
+    await loginPage.login('customer1', 'password')
+    await loginPage.shouldRedirectToStore()
+  })
+
+  await test.step('Interact with product page', async () => {
+    await productPage.openFirstProduct()
+    await productPage.addFirstProductToCart()
+    await productPage.openCart()
+  })
+})
+
+
+
 
 // test('Check items in page 2 and select 1 and see them detail', async ({ page }) => {
 //   const loginPage = new LoginPage(page);

@@ -1,14 +1,10 @@
-import { Page } from '@playwright/test'
+import { Page, expect } from '@playwright/test'
 
 export class LoginPage {
   private page: Page
 
   constructor(page: Page) {
     this.page = page
-  }
-
-  async goto() {
-    await this.page.goto('https://merchandise-dev.odds.team/')
   }
 
   async fillUsername(username: string) {
@@ -27,5 +23,9 @@ export class LoginPage {
     await this.fillUsername(username)
     await this.fillPassword(password)
     await this.submit()
+  }
+
+  async shouldRedirectToStore() {
+    await expect(this.page).toHaveURL(/store\.html/)
   }
 }
