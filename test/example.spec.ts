@@ -1,10 +1,12 @@
 import { test } from '@playwright/test';
 import { LoginPage } from '../page/login-page';
 import { ProductPage } from '../page/product-page';
+import { CartPage } from '../page/cart-page';
 
 test('user can login and add product to cart', async ({ page }) => {
   const loginPage = new LoginPage(page)
   const productPage = new ProductPage(page)
+  const cartPage = new CartPage(page)
 
   await page.goto('https://merchandise-dev.odds.team/')
 
@@ -18,7 +20,12 @@ test('user can login and add product to cart', async ({ page }) => {
     await productPage.addFirstProductToCart()
     await productPage.openCart()
   })
-})
+
+  await test.step('Verify item and checkout', async () => {
+    await cartPage.proceedToCheckout();
+  });
+});
+
 
 
 
